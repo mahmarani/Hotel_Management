@@ -12,11 +12,11 @@ public class LogIn extends JFrame {
     boolean authenticateUser(String email,String password){
         try{
             Connection conn = DataBaseConnection.getConnection();
-            String sql = "Select * from users where username = ? AND email = ? AND password = ?";
+            String sql = "Select * from users where email = ? AND password = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
            // stmt.setString(1, username);
-            stmt.setString(2, email);
-            stmt.setString(3, password);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
             ResultSet rs =stmt.executeQuery();
             return rs.next();
         }
@@ -25,8 +25,25 @@ public class LogIn extends JFrame {
             return false;
         }
     }
+    String getUserName(String email, String password) {
+        try {
+            Connection conn = DataBaseConnection.getConnection();
+            String sql = "SELECT full_name FROM users WHERE email = ? AND password = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("full_name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null; // Login failed or error
+    }
 
-   public LogIn(){
+
+    public LogIn(){
 setTitle("LogIn");
 setSize(1000,600);
 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,10 +133,11 @@ new_to_us.setBounds(150,400,90,20);
                //String username = userField.getText();
                String email = emailField.getText();
                String password= new String(passField.getPassword());
-
+               String name = getUserName(email, password);
                if(authenticateUser(email,password)){
                    JOptionPane.showMessageDialog(null,"LogIn Successfully");
-                   //Then home opens and software proceeds
+                   new HomePage(name);
+                   dispose();
                }
                else{
                    JOptionPane.showMessageDialog(null,"Not Yet Registered");
