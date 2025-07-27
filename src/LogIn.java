@@ -25,7 +25,7 @@ public class LogIn extends JFrame {
             return false;
         }
     }
-    String getUserName(String email, String password) {
+    static String getUserName(String email, String password) {
         try {
             Connection conn = DataBaseConnection.getConnection();
             String sql = "SELECT full_name FROM users WHERE email = ? AND password = ?";

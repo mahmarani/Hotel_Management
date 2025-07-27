@@ -1,0 +1,50 @@
+import javax.swing.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+//import java.util.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+public class AboutUs extends JFrame{
+
+
+    public AboutUs(){
+        setTitle("About Us");
+        setSize(1000,600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        ImageIcon image = new ImageIcon(LogIn.class.getResource("/resources/AboutUs.png"));
+        Image i = image.getImage();
+
+        JPanel Panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(i,0,0,getWidth(),getHeight(),this);
+
+            }
+        };
+        Panel.setLayout(null);
+        JButton back = new JButton("BACK");
+        back.setBounds(0,0,80,20);
+        back.setBackground(Color.BLACK);
+        back.setForeground(Color.WHITE);
+        back.setFont(new Font("georgia",Font.ITALIC,14));
+        back.setFocusPainted(false);
+
+
+        Panel.add(back);
+        add(Panel);
+        setVisible(true);
+
+
+        back.addActionListener(e -> {
+            dispose();
+
+        });
+    }
+
+    public static void main(String[] args) {
+        new AboutUs();
+    }
+}

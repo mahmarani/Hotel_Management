@@ -1,9 +1,14 @@
+import javax.lang.model.element.Name;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
+
 
 public class HomePage extends JFrame {
 
@@ -23,6 +28,10 @@ public class HomePage extends JFrame {
     private final int baseWidth = 1000;
     private final int baseHeight = 600;
 
+
+//    public HomePage(){
+//    HomePage(LogIn.getUserName());
+//    }
     public HomePage(String Name) {
         setTitle("Home");
         setSize(baseWidth, baseHeight);
