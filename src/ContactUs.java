@@ -105,7 +105,9 @@ public class ContactUs extends JFrame {
 
         });
 
-
+back.addActionListener(e -> {
+    dispose();
+});
 
 
         add(Panel);

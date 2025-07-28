@@ -101,7 +101,7 @@ public class HomePage extends JFrame {
             } else if (text.equals("Help")) {
                 new help();
             } else if (text.equals("Contact Us")) {
-                // Contact Us
+              new ContactUs();
             } else if (text.equals("LogOut")) {
                 int choice = JOptionPane.showConfirmDialog(
                         null,
