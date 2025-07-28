@@ -27,9 +27,7 @@ public class HomePage extends JFrame {
     private final int baseHeight = 600;
 
 
-//    public HomePage(){
-//    HomePage(LogIn.getUserName());
-//    }
+
     public HomePage(String Name) {
         setTitle("Home");
         setSize(baseWidth, baseHeight);
@@ -101,7 +99,7 @@ public class HomePage extends JFrame {
             } else if (text.equals("About Us")) {
                new AboutUs();
             } else if (text.equals("Help")) {
-                //Help page
+                new help();
             } else if (text.equals("Contact Us")) {
                 // Contact Us
             } else if (text.equals("LogOut")) {
