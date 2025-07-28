@@ -5,9 +5,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
+import java.util.jar.Attributes;
 
 
 public class HomePage extends JFrame {
@@ -79,6 +77,8 @@ public class HomePage extends JFrame {
         setVisible(true);
     }
 
+
+
     // Add button and store original position
     private void addCustomButton(String text, int x, int y) {
         JButton button = new JButton(text);
@@ -99,7 +99,7 @@ public class HomePage extends JFrame {
             } else if(text.equals("My Bookings")){
                 //bookings page
             } else if (text.equals("About Us")) {
-                //About Us Page
+               new AboutUs();
             } else if (text.equals("Help")) {
                 //Help page
             } else if (text.equals("Contact Us")) {
