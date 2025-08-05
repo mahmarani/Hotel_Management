@@ -1,150 +1,152 @@
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
-public class BrowseRooms extends JFrame{
-    int baseWidth= 1000;
-    int baseHeight= 600;
-    int originalLabelWidth = 240;
-    int originalLabelHeight = 100;
-    int originalFontSize = 16;
-    Point originalLabelPosition;
+public class BrowseRooms extends JFrame {
+    int baseWidth = 1000;
+    int baseHeight = 600;
 
-public BrowseRooms(){
-    setTitle("Rooms");
-    setSize(1000,600);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    ImageIcon image = new ImageIcon(LogIn.class.getResource("/resources/choosing_room.jpg"));
-    Image img = image.getImage();
+    JPanel Panel;
+    Map<Component, Rectangle> originalBounds = new HashMap<>();
+    Map<Component, Font> originalFonts = new HashMap<>();
 
-    JPanel Panel = new JPanel() {
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(img,0,0,getWidth(),getHeight(),this);
+    public BrowseRooms() {
+        setTitle("Rooms");
+        setSize(baseWidth, baseHeight);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        ImageIcon image = new ImageIcon(LogIn.class.getResource("/resources/choosing_room.jpg"));
+        Image img = image.getImage();
+
+        Panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        Panel.setLayout(null);
+
+        // ========== BUTTONS ==========
+        JButton back = createButton("BACK", 0, 0, 80, 20);
+        JButton search = createButton("Search", 370, 490, 150, 35);
+        JButton home = createButton("Home", 620, 47, 90, 30);
+        JButton aboutUs = createButton("About", 745, 47, 90, 30);
+        JButton contactUs = createButton("Contact", 850, 47, 90, 30);
+
+        // ========== COMBO BOXES ==========
+        JComboBox<String> roomTypeBox = createComboBox(new String[]{"Standard", "Deluxe", "Suite"}, 230, 200, 130, 35);
+        JComboBox<String> bedTypeBox = createComboBox(new String[]{"Single", "Double"}, 230, 260, 130, 35);
+        JComboBox<String> acBox = createComboBox(new String[]{"Yes", "No"}, 230, 320, 130, 35);
+        JComboBox<String> viewBox = createComboBox(new String[]{"City", "Sea", "Garden"}, 230, 370, 130, 35);
+
+        // ========== TEXT FIELDS ==========
+        JTextField checkInField = createTextField("2025-08-01", 85, 455, 100, 35);
+        checkInField.setBackground(Color.WHITE);
+        checkInField.setForeground(Color.BLACK);
+        JTextField checkOutField = createTextField("2025-08-05", 200, 455, 100, 35);
+        checkOutField.setBackground(Color.WHITE);
+        checkOutField.setForeground(Color.BLACK);
+
+        // ========== LABELS ==========
+        JLabel bedTypeLabel = createLabel("Select Bed Type:", 85, 240, 200, 65);
+        JLabel roomTypeLabel = createLabel("Select Room Type", 85, 200, 200, 35);
+        JLabel acLabel = createLabel("AC?", 85, 310, 100, 35);
+        JLabel viewLabel = createLabel("Select View", 85, 367, 100, 35);
+        JLabel checkInLabel = createLabel("Check In date", 85, 420, 120, 35);
+        JLabel checkOutLabel = createLabel("Check out date", 200, 420, 150, 35);
+
+        // ========== ADD TO PANEL ==========
+        Component[] allComponents = {
+                back, search, home, aboutUs, contactUs,
+                roomTypeBox, bedTypeBox, acBox, viewBox,
+                checkInField, checkOutField,
+                bedTypeLabel, roomTypeLabel, acLabel, viewLabel, checkInLabel, checkOutLabel
+        };
+
+        for (Component comp : allComponents) {
+            Panel.add(comp);
+            originalBounds.put(comp, comp.getBounds());
+            originalFonts.put(comp, comp.getFont());
         }
-    };
-    Panel.setLayout(null);
-    //back
-    JButton back = new JButton("BACK");
-    back.setBounds(0,0,80,20);
-    back.setBackground(Color.BLACK);
-    back.setForeground(Color.WHITE);
-    back.setFont(new Font("georgia",Font.ITALIC,14));
-    back.setFocusPainted(false);
-//search
-    JButton search = new JButton("Search");
-    search.setBounds(370,490, 150, 35);
-    search.setBackground(Color.BLACK);
-    search.setForeground(Color.WHITE);
-    search.setFont(new Font("Georgia", Font.BOLD, 14));
-    search.setFocusPainted(false);
-    search.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    Panel.add(search);
-    //rooms to home
-    JButton home = new JButton("home");
-    home.setBounds(370,40, 150, 35);
-    home.setBackground(Color.BLACK);
-    home.setForeground(Color.WHITE);
-    home.setFont(new Font("Georgia", Font.BOLD, 14));
-    home.setFocusPainted(false);
-    home.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    Panel.add(home);
-    //rooms to about us
-     JButton About_us = new JButton("About Us");
-    About_us.setBounds(370,30, 150, 35);
-    About_us.setBackground(Color.BLACK);
-    About_us.setForeground(Color.WHITE);
-    About_us.setFont(new Font("Georgia", Font.BOLD, 14));
-    About_us.setFocusPainted(false);
-    About_us.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    Panel.add(About_us);
-//Contact
-JButton Contact_Us = new JButton("Contact");
-    Contact_Us.setBounds(850,49, 100, 35);
-    Contact_Us.setBackground(Color.BLACK);
-    Contact_Us.setForeground(Color.WHITE);
-    Contact_Us.setFont(new Font("Georgia", Font.BOLD, 14));
-    Contact_Us.setFocusPainted(false);
-    Contact_Us.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    Panel.add(Contact_Us);
 
-    JComboBox<String> roomTypeBox, bedTypeBox, acBox, viewBox;
-    JTextField checkInField, checkOutField;
-    JButton searchButton, backButton;
-    JPanel resultPanel;
+        // Resize handler
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                resizeComponents();
+            }
+        });
 
-    roomTypeBox = new JComboBox<>(new String[]{"Standard", "Deluxe", "Suite"});
-    bedTypeBox = new JComboBox<>(new String[]{"Single", "Double"});
-    acBox = new JComboBox<>(new String[]{"Yes", "No"});
-    viewBox = new JComboBox<>(new String[]{"City", "Sea", "Garden"});
-    checkInField = new JTextField("2025-08-01"); // Replace with JDatePicker later
-    checkOutField = new JTextField("2025-08-05");
+        add(Panel);
+        setVisible(true);
 
+        // Action
+        back.addActionListener(e -> dispose());
+    }
 
+    private JButton createButton(String text, int x, int y, int w, int h) {
+        JButton btn = new JButton(text);
+        btn.setBounds(x, y, w, h);
+        btn.setBackground(Color.BLACK);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Georgia", Font.BOLD, 14));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
 
+    private JComboBox<String> createComboBox(String[] items, int x, int y, int w, int h) {
+        JComboBox<String> box = new JComboBox<>(items);
+        box.setBounds(x, y, w, h);
+        box.setBackground(Color.BLACK);
+        box.setForeground(Color.WHITE);
+        box.setFont(new Font("Georgia", Font.BOLD, 14));
+        return box;
+    }
 
+    private JTextField createTextField(String text, int x, int y, int w, int h) {
+        JTextField tf = new JTextField(text);
+        tf.setBounds(x, y, w, h);
+        tf.setBackground(Color.BLACK);
+        tf.setForeground(Color.WHITE);
+        tf.setFont(new Font("Georgia", Font.BOLD, 14));
+        return tf;
+    }
 
+    private JLabel createLabel(String text, int x, int y, int w, int h) {
+        JLabel lbl = new JLabel(text);
+        lbl.setBounds(x, y, w, h);
+        lbl.setFont(new Font("Georgia", Font.BOLD, 14));
+        lbl.setForeground(Color.black);
+        return lbl;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    // Reposition all components based on window size
-
-
-
-    Panel.add(back);
-    add(Panel);
-    setVisible(true);
-
-
-
-
-
-
-
-
-
-    //ACTIONLISTENERS:
-    back.addActionListener(e -> {
-        dispose();
-    });
-
-
-}
-    public void repositionComponents() {
+    private void resizeComponents() {
         double xRatio = (double) getWidth() / baseWidth;
         double yRatio = (double) getHeight() / baseHeight;
 
-        // Reposition and resize buttons
-//        for (int i = 0; i < buttonList.size(); i++) {
-//            JButton btn = buttonList.get(i);
-//            Point original = originalPositions.get(i);
-//            int newX = (int) (original.x * xRatio);
-//            int newY = (int) (original.y * yRatio);
-//            btn.setBounds(newX, newY, (int)(180 * xRatio), (int)(25 * yRatio));
-//        }
+        for (Component comp : Panel.getComponents()) {
+            Rectangle original = originalBounds.get(comp);
+            if (original != null) {
+                int newX = (int) (original.x * xRatio);
+                int newY = (int) (original.y * yRatio);
+                int newW = (int) (original.width * xRatio);
+                int newH = (int) (original.height * yRatio);
+                comp.setBounds(newX, newY, newW, newH);
+            }
 
-        // Reposition and resize label
-        int newLabelX = (int)(originalLabelPosition.x * xRatio);
-        int newLabelY = (int)(originalLabelPosition.y * yRatio);
-        int newLabelWidth = (int)(originalLabelWidth * xRatio);
-        int newLabelHeight = (int)(originalLabelHeight * yRatio);
-        int newFontSize = Math.max((int)(originalFontSize * yRatio), 12); // minimum font size
-//        nameLabel.setBounds(newLabelX, newLabelY, newLabelWidth, newLabelHeight);
-//        nameLabel.setFont(new Font("Georgia", Font.BOLD, newFontSize));
+            Font originalFont = originalFonts.get(comp);
+            if (originalFont != null) {
+                float newSize = (float) (originalFont.getSize() * yRatio);
+                comp.setFont(originalFont.deriveFont(Math.max(newSize, 10f))); // min font size 10
+            }
+        }
+
+
     }
+
     public static void main(String[] args) {
-new  BrowseRooms();
+        new BrowseRooms();
     }
 }
