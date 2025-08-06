@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
+import com.toedter.calendar.JDateChooser;
 public class BrowseRooms extends JFrame {
     int baseWidth = 1000;
     int baseHeight = 600;
@@ -17,7 +17,7 @@ public class BrowseRooms extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        ImageIcon image = new ImageIcon(LogIn.class.getResource("/resources/choosing_room.jpg"));
+        ImageIcon image = new ImageIcon(LogIn.class.getResource("/resources/ChooseYourRoom.jpg"));
         Image img = image.getImage();
 
         Panel = new JPanel() {
@@ -41,28 +41,30 @@ public class BrowseRooms extends JFrame {
         JComboBox<String> acBox = createComboBox(new String[]{"Yes", "No"}, 230, 320, 130, 35);
         JComboBox<String> viewBox = createComboBox(new String[]{"City", "Sea", "Garden"}, 230, 370, 130, 35);
 
-        // ========== TEXT FIELDS ==========
-        JTextField checkInField = createTextField("2025-08-01", 85, 455, 100, 35);
-        checkInField.setBackground(Color.WHITE);
-        checkInField.setForeground(Color.BLACK);
-        JTextField checkOutField = createTextField("2025-08-05", 200, 455, 100, 35);
-        checkOutField.setBackground(Color.WHITE);
-        checkOutField.setForeground(Color.BLACK);
 
         // ========== LABELS ==========
         JLabel bedTypeLabel = createLabel("Select Bed Type:", 85, 240, 200, 65);
         JLabel roomTypeLabel = createLabel("Select Room Type", 85, 200, 200, 35);
         JLabel acLabel = createLabel("AC?", 85, 310, 100, 35);
         JLabel viewLabel = createLabel("Select View", 85, 367, 100, 35);
-        JLabel checkInLabel = createLabel("Check In date", 85, 420, 120, 35);
-        JLabel checkOutLabel = createLabel("Check out date", 200, 420, 150, 35);
+        JLabel checkInLabel = createLabel("Check-in Date:", 85, 420, 120, 35);
+        JLabel checkOutLabel = createLabel("Check-out Date:", 85, 450, 120, 35);
+
+        // ===== DATE PICKERS =====
+
+        JDateChooser checkInDate = new JDateChooser();
+        checkInDate.setBounds( 230, 420, 120, 25);
+        checkInDate.setDateFormatString("yyyy-MM-dd");
+        JDateChooser checkOutDate = new JDateChooser();
+        checkOutDate.setBounds(230, 450, 120, 25);
+        checkOutDate.setDateFormatString("yyyy-MM-dd");
 
         // ========== ADD TO PANEL ==========
         Component[] allComponents = {
                 back, search, home, aboutUs, contactUs,
                 roomTypeBox, bedTypeBox, acBox, viewBox,
-                checkInField, checkOutField,
-                bedTypeLabel, roomTypeLabel, acLabel, viewLabel, checkInLabel, checkOutLabel
+                bedTypeLabel, roomTypeLabel, acLabel, viewLabel,
+                checkInLabel, checkInDate, checkOutLabel, checkOutDate
         };
 
         for (Component comp : allComponents) {
@@ -81,8 +83,43 @@ public class BrowseRooms extends JFrame {
         add(Panel);
         setVisible(true);
 
-        // Action
+        // Actions
+        //Back
         back.addActionListener(e -> dispose());
+        //home
+        home.addActionListener(e -> {
+           dispose();
+        });
+        //Contact
+        contactUs.addActionListener(e -> {
+            new ContactUs();
+        });
+        //About
+        aboutUs.addActionListener(e -> {
+            new AboutUs();
+        });
+        search.addActionListener(e -> {
+            String roomTypeString = roomTypeBox.getSelectedItem().toString();
+            String bedTypeString = bedTypeBox.getSelectedItem().toString();
+            String acString = acBox.getSelectedItem().toString();
+            boolean ac = acString.equalsIgnoreCase("Yes");
+            String viewStr = viewBox.getSelectedItem().toString();
+            Date checkIn = checkInDate.getDate();
+            Date checkOut = checkOutDate.getDate();
+
+
+            if (checkIn == null || checkOut == null) {
+                JOptionPane.showMessageDialog(this, "Please select both check-in and check-out dates.");
+                return;
+            }
+            if(!checkOut.after(checkIn)){
+                JOptionPane.showMessageDialog(this, "Check-out date must be after check-in date.");
+                return;
+            }
+
+            new AvailableRooms(roomTypeString,bedTypeString,ac,viewStr);
+
+        });
     }
 
     private JButton createButton(String text, int x, int y, int w, int h) {
@@ -105,14 +142,7 @@ public class BrowseRooms extends JFrame {
         return box;
     }
 
-    private JTextField createTextField(String text, int x, int y, int w, int h) {
-        JTextField tf = new JTextField(text);
-        tf.setBounds(x, y, w, h);
-        tf.setBackground(Color.BLACK);
-        tf.setForeground(Color.WHITE);
-        tf.setFont(new Font("Georgia", Font.BOLD, 14));
-        return tf;
-    }
+
 
     private JLabel createLabel(String text, int x, int y, int w, int h) {
         JLabel lbl = new JLabel(text);
@@ -142,6 +172,9 @@ public class BrowseRooms extends JFrame {
                 comp.setFont(originalFont.deriveFont(Math.max(newSize, 10f))); // min font size 10
             }
         }
+
+
+
 
 
     }
