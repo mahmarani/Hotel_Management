@@ -20,21 +20,36 @@ public class AvailableRooms extends JFrame {
 
             }
         };
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(10,100,290,240);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        Panel.add(scrollPane);
+
+
         Panel.setLayout(null);
         JButton back = new JButton("BACK");
-        back.setBounds(0,0,80,20);
+        back.setBounds(0,0,60,20);
         back.setBackground(Color.BLACK);
         back.setForeground(Color.WHITE);
         back.setFont(new Font("georgia",Font.ITALIC,14));
         back.setFocusPainted(false);
         Panel.add(back);
+
+
+        JButton home = createButton("Home", 620, 47, 90, 30);
+        JButton aboutUs = createButton("About", 745, 47, 90, 30);
+        JButton contactUs = createButton("Contact", 1000, 47, 90, 30);
+        Panel.add(home);
+        Panel.add(aboutUs);
+        Panel.add(contactUs);
+
         add(Panel);
 
-JPanel resultPanel = new JPanel();
-resultPanel.setLayout(new BoxLayout(resultPanel,BoxLayout.Y_AXIS));
-JScrollPane scrollPane = new JScrollPane(resultPanel);
-scrollPane.setBounds(5,80,480,350);
-Panel.add(scrollPane);
+
+
+
 
 try{
     Connection conn = DataBaseConnection.getConnection();
@@ -72,29 +87,6 @@ try{
 } catch (Exception e) {
     e.printStackTrace();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         setVisible(true);
         //action
         back.addActionListener(e -> {
@@ -103,6 +95,17 @@ try{
         });
 setVisible(true);
     }
+    private JButton createButton(String text, int x, int y, int w, int h) {
+        JButton btn = new JButton(text);
+        btn.setBounds(x, y, w, h);
+        btn.setBackground(Color.BLACK);
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Georgia", Font.BOLD, 14));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
 
     public static void main(String[] args) {
         new AvailableRooms("Suite","single",true,"garden");

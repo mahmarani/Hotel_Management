@@ -93,7 +93,7 @@ public class HomePage extends JFrame {
 
         button.addActionListener(e -> {
             if(text.equals("Browse Rooms")) {
-                //Browse Room Window
+              new BrowseRooms();
             } else if(text.equals("My Bookings")){
                 //bookings page
             } else if (text.equals("About Us")) {
